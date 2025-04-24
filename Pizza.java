@@ -16,7 +16,7 @@ public class Pizza extends Item {
         price += topping1.getExtraCost();
     }
 
-    /*public double getPrice() {
+    public double getPrice() {
         double base = 12.00;
         double toppingTotal = 0.0;
 
@@ -29,7 +29,7 @@ public class Pizza extends Item {
         }
 
         return base + toppingTotal;
-    }*/
+    }
     public List<Topping> getToppings() {
         return toppings;
     }

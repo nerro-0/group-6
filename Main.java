@@ -10,6 +10,8 @@ public class Main {
     private JFrame mainFrame;
     private static Cost orderCost;
 
+
+
     public Main() {
         orderCost = new Cost();
         JFrame frame = new JFrame("Pizza Restaurant");
@@ -70,6 +72,10 @@ public class Main {
             button.addActionListener(e -> {
                 pizza.addTopping(topping);
                 orderCost.addItem(pizza);
+                /*int option = JOptionPane.showConfirmDialog(pizzaFrame, "Add " + topping + "?", "Toppings", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    pizza.addTopping(new Topping(topping));
+                }*/
             });
             pizzaFrame.add(button);
         }
