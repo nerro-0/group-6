@@ -1,0 +1,89 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class Main {
+
+    static Order order = new Order();
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Pizza Restaurant");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(550, 450);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(3, 2, 10, 10));
+
+        JButton pButton = new JButton("Pizza");
+        JButton sDButton = new JButton("Sides");
+        JButton dButton = new JButton("Drinks");
+        JButton nOrderButton = new JButton("New Order");
+        JButton cOrderButton = new JButton("Finish Order");
+
+        JTextArea receiptArea = new JTextArea(10, 40);
+        receiptArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(receiptArea);
+
+        // Pizza Button
+        pButton.addActionListener(e -> {
+            Pizza pizza = new Pizza();
+
+            String[] toppings = {"Cheese", "Pepperoni", "Sausage", "Mushrooms", "Onions", "Bacon"};
+            for (String t : toppings) {
+                int option = JOptionPane.showConfirmDialog(frame, "Add " + t + "?", "Toppings", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    pizza.addTopping(new Topping(t));
+                }
+            }
+
+            order.addPizza(pizza);
+            receiptArea.append("Pizza (Regular) - $" + pizza.getPrice() + "\n");
+        });
+
+        // Drink Button (no size)
+        dButton.addActionListener(e -> {
+            String[] drinks = {"Sprite", "Coca Cola", "Fanta", "Dr. Pepper", "Water"};
+            String drink = (String) JOptionPane.showInputDialog(frame, "Choose Drink:", "Drinks",
+                    JOptionPane.QUESTION_MESSAGE, null, drinks, drinks[0]);
+
+            Drink d = new Drink(drink);
+            order.addDrink(d);
+            receiptArea.append("Drink: " + drink + " - $" + d.getPrice() + "\n");
+        });
+
+        // Side Dish
+        sDButton.addActionListener(e -> {
+            String[] sides = {"Breadsticks", "Wings", "Lava Cake", "Mozzarella Sticks"};
+            String side = (String) JOptionPane.showInputDialog(frame, "Choose Side Dish:", "Sides",
+                    JOptionPane.QUESTION_MESSAGE, null, sides, sides[0]);
+
+            String qtyStr = JOptionPane.showInputDialog("Enter Quantity:");
+            int quantity = Integer.parseInt(qtyStr);
+
+            SideDish s = new SideDish(side, quantity);
+            order.addSideDish(s);
+            receiptArea.append("Side: " + side + " x" + quantity + " - $" + s.getPrice() + "\n");
+        });
+
+        // New Order
+        nOrderButton.addActionListener(e -> {
+            order = new Order();
+            receiptArea.setText("New order started...\n");
+        });
+
+        // Finish Order
+        cOrderButton.addActionListener(e -> {
+            double total = order.calculateTotal();
+            receiptArea.append("\nOrder Completed. Total: $" + String.format("%.2f", total) + "\n");
+        });
+
+        panel.add(pButton);
+        panel.add(sDButton);
+        panel.add(dButton);
+        panel.add(nOrderButton);
+        panel.add(cOrderButton);
+
+        frame.add(panel, BorderLayout.CENTER);
+        frame.add(scrollPane, BorderLayout.SOUTH);
+        frame.setVisible(true);
+    }
+}
